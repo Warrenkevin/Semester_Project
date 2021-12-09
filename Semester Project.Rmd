@@ -13,7 +13,7 @@ output: html_document
 library(dplyr)
 library(readxl)
 library(png)
-Arctic_Carn <- read_excel("~/Documents/Boston University/AN588 Bioanthro Stats/Book1.xlsx")
+Arctic_Carn <- read_excel("~/Desktop/Data.xlsx")
 head(Arctic_Carn)
 ```
 ### Select data
