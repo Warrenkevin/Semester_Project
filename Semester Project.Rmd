@@ -23,7 +23,8 @@ Arctic_Carn_Clean <- Arctic_Carn %>% dplyr::select(Code, Family, "Body mass (kg)
 head(Arctic_Carn_Clean)
 ```
 ### Pander
-##### Once the data was cleaned up a bit I used the pander package so I could use the mutuate(). Mutate is a package that allows you to add new variables while preserving others. Here I was able to create new columns of log10 that I is needed for the replication assignment. 
+##### Once the data was cleaned up a bit I used the pander package so I could use the mutuate(). Mutate is a package that allows you to add new variables while preserving others. Here I was able to create new columns of log10 that I needed for the replication assignment.
+
 ```{r}
 library(pander)
 Arctic_Carn_Clean_log <- mutate(Arctic_Carn_Clean, lnBM=log10(Arctic_Carn_Clean$`Body mass (kg)`), lnSL=log10(Arctic_Carn_Clean$`Skull length (mm)`), lnCV=log10(Arctic_Carn_Clean$`Chamber volume (mm3)`), lnTTSA=log10(Arctic_Carn_Clean$`TTSA (mm2)`), lnRTSA=log10(Arctic_Carn_Clean$`RTSA (mm2)`), lnOTSA=log10(Arctic_Carn_Clean$`OTSA (mm2)`), lnOTSARTSA=log10(Arctic_Carn_Clean$`OTSA/RTSA`))
@@ -32,7 +33,7 @@ head(Arctic_Carn_Clean_log)
 ### Replication
 ##### During this step I was able to select for the new log10 columns that I created to replicate the regression  models that were in Green et al. (2012). ggplot() was used to create ggplt1-ggplt5. 
 
-
+![log10/log10 (A) TTSA v. SL, (B) RTSA v. BM, (C) RTSA v. CV](https://raw.githubusercontent.com/Warrenkevin/Semester_Project/main/Screen%20Shot%202021-12-08%20at%209.50.48%20PM.png) 
 ```{r}
 library(ggplot2)
 ggplt1 <- ggplot(Arctic_Carn_Clean_log, aes(Arctic_Carn_Clean_log$lnSL, Arctic_Carn_Clean_log$lnTTSA)) + geom_point(aes(shape=Family)) +
