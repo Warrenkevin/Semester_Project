@@ -7,13 +7,13 @@ output: html_document
 
 ![](https://raw.githubusercontent.com/Warrenkevin/Semester_Project/main/PB1.gif)
 
-###### The paper that I am replicating is Green et al. (2012). This paper investigates the nasal cavity of canid and arctoid carnivorans. The authors used high-resolution CT scans to estimate the respiratory and olfactory turbinal surface area and nasal chamber volume using 3D models of skulls. The goal of the original paper was to do a one-on-one comparison of closely related taxa (e.g., Polar Bears and Brown Bears) for example to observe if climate has any significance on the size of turbinates. The data set used was pull directly from the paper and remade in excel with the addition of log10 values. For this study the authors used regression models with Least-square regression lines.
+##### The paper that I am replicating is Green et al. (2012). This paper investigates the nasal cavity of canid and arctoid carnivorans. The authors used high-resolution CT scans to estimate the respiratory and olfactory turbinal surface area and nasal chamber volume using 3D models of skulls. The goal of the original paper was to do a one-on-one comparison of closely related taxa (e.g., Polar Bears and Brown Bears) for example to observe if climate has any significance on the size of turbinates. The data set used was pull directly from the paper and remade in excel with the addition of log10 values. For this study the authors used regression models with Least-square regression lines.
 
 ### Set-up and Load in Data
 
 ![](https://raw.githubusercontent.com/Warrenkevin/Semester_Project/main/setup.gif)
 
-##### I first loaded in the dplyr, readXL and png files in order to replicate the data. Dplyr aims to provide a function for each basic verb of data manipulation, readXl package makes it easy to get data out of Excel, png allows for graphics to be embedded into the r-markdon. After I loaded my packages I recreated the table as outlined in Green et al. (2012) and read it into to R. 
+##### I first loaded in the dplyr, readXL and png packages in order to replicate the data. Dplyr aims to provide a function for each basic verb of data manipulation, readXl package makes it easy to get data out of Excel, png allows for graphics to be embedded into the r-markdon. After I loaded my packages I recreated the table as outlined in Green et al. (2012) and read it into to R. 
 ```{r}
 library(dplyr)
 library(readxl)
