@@ -4,16 +4,16 @@ author: "Warrenkevin Henderson"
 date: "12/07/2020"
 output: html_document
 ---
-
+ 
 ![](https://raw.githubusercontent.com/Warrenkevin/Semester_Project/main/PB1.gif)
-
+ 
 ##### The paper that I am replicating is Green et al. (2012). This paper investigates the nasal cavity of canid and arctoid carnivorans. The authors used high-resolution CT scans to estimate the respiratory and olfactory turbinal surface area and nasal chamber volume using 3D models of skulls. The goal of the original paper was to do a one-on-one comparison of closely related taxa (e.g., Polar Bears and Brown Bears) for example to observe if climate has any significance on the size of turbinates. The data set used was pull directly from the paper and remade in excel with the addition of log10 values. For this study the authors used regression models with Least-square regression lines.
-
+ 
 ### Set-up and Load in Data
-
+ 
 ![](https://raw.githubusercontent.com/Warrenkevin/Semester_Project/main/setup.gif)
-
-##### I first loaded in the dplyr, readXL and png packages in order to replicate the data. Dplyr aims to provide a function for each basic verb of data manipulation, readXl package makes it easy to get data out of Excel, png allows for graphics to be embedded into the r-markdon. After I loaded my packages I recreated the table as outlined in Green et al. (2012) and read it into to R. 
+ 
+##### I first loaded in the dplyr, readXL and png packages in order to replicate the data. Dplyr aims to provide a function for each basic verb of data manipulation, readXl package makes it easy to get data out of Excel, png allows for graphics to be embedded into the r-markdon. After I loaded my packages I recreated the table as outlined in Green et al. (2012) and read it into to R.
 ```{r}
 library(dplyr)
 library(readxl)
@@ -24,12 +24,12 @@ head(Arctic_Carn)
 ### Select data
 ##### I used the select() to select for only the columns that I needed. Species name, diet, and sex was not pertinent to this replication so it was left out. Since I was creating a new table I used the infix operator %>% to pass the left hand side of the operator to the first argument of the right hand side of the operator.
 ```{r}
-Arctic_Carn_Clean <- Arctic_Carn %>% dplyr::select(Code, Family, "Body mass (kg)", "Skull length (mm)", "Chamber volume (mm3)", "TTSA (mm2)", "RTSA (mm2)", "OTSA (mm2)", "OTSA/RTSA" )
+Arctic_Carn_Clean <- Arctic_Carn %>% dplyr::select(Code, Family,Diet, "Body mass (kg)", "Skull length (mm)", "Chamber volume (mm3)", "TTSA (mm2)", "RTSA (mm2)", "OTSA (mm2)", "OTSA/RTSA" )
 head(Arctic_Carn_Clean)
 ```
 ### Pander
-##### Once the data was cleaned up a bit I used the pander package so I could use the mutuate(). Mutate is a package that allows you to add new variables while preserving others. Here I was able to create new columns of log10 that I needed for the replication assignment.I did not use head() for this portion so you can see the log10 values that I created. 
-
+##### Once the data was cleaned up a bit I used the pander package so I could use the mutuate(). Mutate is a package that allows you to add new variables while preserving others. Here I was able to create new columns of log10 that I needed for the replication assignment.I did not use head() for this portion so you can see the log10 values that I created.
+ 
 ```{r}
 library(pander)
 Arctic_Carn_Clean_log <- mutate(Arctic_Carn_Clean, lnBM=log10(Arctic_Carn_Clean$`Body mass (kg)`), lnSL=log10(Arctic_Carn_Clean$`Skull length (mm)`), lnCV=log10(Arctic_Carn_Clean$`Chamber volume (mm3)`), lnTTSA=log10(Arctic_Carn_Clean$`TTSA (mm2)`), lnRTSA=log10(Arctic_Carn_Clean$`RTSA (mm2)`), lnOTSA=log10(Arctic_Carn_Clean$`OTSA (mm2)`), lnOTSARTSA=log10(Arctic_Carn_Clean$`OTSA/RTSA`))
@@ -37,119 +37,188 @@ Arctic_Carn_Clean_log
 ```
 ### Replication
 ##### During this step I was able to select for the new log10 columns that I created to replicate the regression  models that were in Green et al. (2012). ggplot() was used to create ggplt1-ggplt5. The the first three figures (as seen below) are from Green et al. (2012). They are of total turbinate surface area (TTSA) vs Skull Length (SL), respiratory turbinate surface area (RTSA) vs body mass (kg) (BM), and respiratory surface area (RTSA) vs chamber volume (CV)
-
-![](https://raw.githubusercontent.com/Warrenkevin/Semester_Project/main/Screen%20Shot%202021-12-08%20at%209.50.48%20PM.png) 
-
-##### I loaded ggplot2 into R to create my graphics and used using geom_point() to tell R to select a shape based upon Family (e.g., Canidae or Arctoidea). Originally the graph axis were in increments of 1.0 so I used scale_x_continuous(breaks=seq()) and scale_y_continuous(breaks=seq()) to set the axis to the increments that were in Green et al. (2012) so as you see they differ between the five figures. Stat_smooth was used to get the linear regression. "Fullrange=True" was used because without it would only place a regression point from the start end of each the families that I used. This function allowed for a regression to go all the way through and not halfway. You will see two stat_smooth functions because one was for the linear regression without considering canids and arctoid and the other one is to have two separate regression for each Family. I was having issues getting the figures to be exactly the same because for the normal regression line they the authors made used a dashed line and color coded the arctoids and canids as different colors but I was not sure on how to do that because if changed the line type when selecting for Family it would have changed both. 
-
+ 
+![](https://raw.githubusercontent.com/Warrenkevin/Semester_Project/main/Screen%20Shot%202021-12-08%20at%209.50.48%20PM.png)
+ 
+##### I loaded ggplot2 into R to create my graphics and used using geom_point() to tell R to select a shape based upon Family (e.g., Canidae or Arctoidea). Originally the graph axis were in increments of 1.0 so I used scale_x_continuous(breaks=seq()) and scale_y_continuous(breaks=seq()) to set the axis to the increments that were in Green et al. (2012) so as you see they differ between the five figures. Stat_smooth was used to get the linear regression. "Fullrange=True" was used because without it would only place a regression point from the start end of each the families that I used. This function allowed for a regression to go all the way through and not halfway. You will see two stat_smooth functions because one was for the linear regression without considering canids and arctoid and the other one is to have two separate regression for each Family. I was having issues getting the figures to be exactly the same because for the normal regression line they the authors made used a dashed line and color coded the arctoids and canids as different colors but I was not sure on how to do that because if changed the line type when selecting for Family it would have changed both.
+ 
 ```{r}
 library(ggplot2)
 ggplt1 <- ggplot(Arctic_Carn_Clean_log, aes(Arctic_Carn_Clean_log$lnSL, Arctic_Carn_Clean_log$lnTTSA)) + geom_point(aes(shape=Family)) +
-  
+ 
   scale_x_continuous(breaks=seq(1.6,2.6,by=.2)) + scale_y_continuous(breaks=seq(3.5,5.5,by=.5)) +
-
- stat_smooth(method = "lm", se=FALSE,fullrange=TRUE, color="black", size=.3,
-				aes(shape=Family)) + 
+stat_smooth(method = "lm", se=FALSE,fullrange=TRUE, color="black", size=.3,
+                                                                aes(shape=Family)) +
   
-  stat_smooth(method = "lm", 
+  stat_smooth(method = "lm",
               formula =y ~ x,se = FALSE, color="red", size=.3) +
-  
+ 
   
   
   labs(x = "Log10 skull length (mm)", y = "Log10 total turbinal surface area (mm2)") + geom_text(aes(label=Code), size=2, data=Arctic_Carn_Clean_log) + theme(
-  panel.border = element_blank(),  
+  panel.border = element_blank(), 
   panel.grid.major = element_blank(),
   panel.grid.minor = element_blank(),
   panel.background = element_blank(),
   axis.line = element_line(colour = "black") )
-ggplt1 + theme(legend.position = "none")
+ggplt1 + theme(legend.position = "none") +
+  theme(legend.title = element_blank(),
+        legend.spacing.y = unit(0, "mm"),
+        panel.border = element_rect(colour = "black", fill=NA),
+        aspect.ratio = 1, axis.text = element_text(colour = 1, size = 12),
+        legend.background = element_blank(),
+        legend.box.background = element_rect(colour = "black"))
 ```
 ```{r}
 library(ggplot2)
 ggplt2 <- ggplot(Arctic_Carn_Clean_log, aes(Arctic_Carn_Clean_log$lnBM, Arctic_Carn_Clean_log$lnRTSA)) + geom_point(aes(shape=Family)) +
-  
+ 
   scale_x_continuous(breaks=seq(-0.5,2.5,by=.5)) + scale_y_continuous(breaks=seq(2.5,5.0,by=.5)) +
-
- stat_smooth(method = "lm", se=FALSE,fullrange=TRUE, color="black", size=.3,
-				aes(shape=Family)) + 
+stat_smooth(method = "lm", se=FALSE,fullrange=TRUE, color="black", size=.3,
+                                                                aes(shape=Family)) +
   
-  stat_smooth(method = "lm", 
+  stat_smooth(method = "lm",
               formula =y ~ x,se = FALSE, color="red", size=.3) +
-  
+ 
   
   
   labs(x = "Log10 mass (kg)", y = "Log10 respiratory turbinal surface area (mm2)") + geom_text(aes(label=Code), size=2, data=Arctic_Carn_Clean_log) + theme(
-  panel.border = element_blank(),  
+  panel.border = element_blank(), 
   panel.grid.major = element_blank(),
   panel.grid.minor = element_blank(),
   panel.background = element_blank(),
   axis.line = element_line(colour = "black") )
-ggplt2 + theme(legend.position = "none")
+ggplt2 + theme(legend.position = "none") +
+  theme(legend.title = element_blank(),
+        legend.spacing.y = unit(0, "mm"),
+        panel.border = element_rect(colour = "black", fill=NA),
+        aspect.ratio = 1, axis.text = element_text(colour = 1, size = 12),
+        legend.background = element_blank(),
+        legend.box.background = element_rect(colour = "black"))
 ```
 ```{r}
 library(ggplot2)
 ggplt3 <- ggplot(Arctic_Carn_Clean_log, aes(Arctic_Carn_Clean_log$lnCV, Arctic_Carn_Clean_log$lnRTSA)) + geom_point(aes(shape=Family)) +
-  
+ 
   scale_x_continuous(breaks=seq(3.0,6.0,by=.5)) + scale_y_continuous(breaks=seq(2.5,5.0,by=.5)) +
-
- stat_smooth(method = "lm", se=FALSE,fullrange=TRUE, color="black", size=.3,
-				aes(shape=Family)) + 
+stat_smooth(method = "lm", se=FALSE,fullrange=TRUE, color="black", size=.3,
+                                                                aes(shape=Family)) +
   
-  stat_smooth(method = "lm", 
+  stat_smooth(method = "lm",
               formula =y ~ x,se = FALSE, color="red", size=.3) +
-  
+ 
   
   
   labs(x = "Log10 mass (kg)", y = "Log10 olfactory turbinal surface area (mm2)") + geom_text(aes(label=Code), size=2, data=Arctic_Carn_Clean_log) + theme(
-  panel.border = element_blank(),  
+  panel.border = element_blank(), 
   panel.grid.major = element_blank(),
   panel.grid.minor = element_blank(),
   panel.background = element_blank(),
   axis.line = element_line(colour = "black") )
-ggplt3 + theme(legend.position = "none")
+ggplt3 + theme(legend.position = "none") +
+  theme(legend.title = element_blank(),
+        legend.spacing.y = unit(0, "mm"),
+        panel.border = element_rect(colour = "black", fill=NA),
+        aspect.ratio = 1, axis.text = element_text(colour = 1, size = 12),
+        legend.background = element_blank(),
+        legend.box.background = element_rect(colour = "black"))
 ```
-
+ 
 ![](https://raw.githubusercontent.com/Warrenkevin/Semester_Project/main/Screen%20Shot%202021-12-08%20at%209.50.39%20PM.png)
 ```{r}
 library(ggplot2)
 ggplt4 <- ggplot(Arctic_Carn_Clean_log, aes(Arctic_Carn_Clean_log$lnBM, Arctic_Carn_Clean_log$lnOTSA)) + geom_point(aes(shape=Family)) +
-  
+ 
   scale_x_continuous(breaks=seq(-0.5,2.5,by=.5)) + scale_y_continuous(breaks=seq(3.5,5.5,by=.5)) +
-
- stat_smooth(method = "lm", se=FALSE,fullrange=TRUE, color="black", size=.3,
-				aes(shape=Family)) + 
+stat_smooth(method = "lm", se=FALSE,fullrange=TRUE, color="black", size=.3,
+                                                                aes(shape=Family)) +
   
-  stat_smooth(method = "lm", 
+  stat_smooth(method = "lm",
               formula =y ~ x,se = FALSE, color="red", linetype = "dashed", size=.3) +
-  
+ 
   
   
   labs(x = "Log10 mass (kg)", y = "Log10 olfactory turbinal surface area (mm2)") + geom_text(aes(label=Code), size=2, data=Arctic_Carn_Clean_log) + theme(
-  panel.border = element_blank(),  
+  panel.border = element_blank(), 
   panel.grid.major = element_blank(),
   panel.grid.minor = element_blank(),
   panel.background = element_blank(),
   axis.line = element_line(colour = "black") )
-ggplt4 + theme(legend.position = "none") 
+ggplt4 + theme(legend.position = "none") +
+  theme(legend.title = element_blank(),
+        legend.spacing.y = unit(0, "mm"),
+        panel.border = element_rect(colour = "black", fill=NA),
+        aspect.ratio = 1, axis.text = element_text(colour = 1, size = 12),
+        legend.background = element_blank(),
+        legend.box.background = element_rect(colour = "black"))
 ```
-
+ 
 ```{r}
 library(ggplot2)
 ggplt5 <- ggplot(Arctic_Carn_Clean_log, aes(Arctic_Carn_Clean_log$lnCV, (Arctic_Carn_Clean_log$lnOTSA))) + geom_point(aes(shape=Family)) +
-  
+ 
   scale_x_continuous(breaks=seq(3.0,6.0,by=.5)) + scale_y_continuous(breaks=seq(3.5,5.5,by=.5)) +
-  
-stat_smooth(method = "lm", se=FALSE,fullrange=TRUE, color="black", size=.3, 
-				aes(shape=Family)) +  stat_smooth(method = "lm", 
+ 
+stat_smooth(method = "lm", se=FALSE,fullrange=TRUE, color="black", size=.3,
+                                                                aes(shape=Family)) +  stat_smooth(method = "lm",
               formula =y ~ x,se = FALSE, color="red", size=.3, linetype = "dashed") +
   labs(x = "Log10 chamber volume (mm3)", y = "Log10 olfactory turbinal surface area (mm2)")  + geom_text(aes(label=Code), size=2, data=Arctic_Carn_Clean_log) + theme(
-  panel.border = element_blank(),  
+  panel.border = element_blank(), 
   panel.grid.major = element_blank(),
   panel.grid.minor = element_blank(),
   panel.background = element_blank(),
   axis.line = element_line(colour = "black"))
-ggplt5 + theme(legend.position = "none")
-
-
+ggplt5 + theme(legend.position = "none") +
+  theme(legend.title = element_blank(),
+        legend.spacing.y = unit(0, "mm"),
+        panel.border = element_rect(colour = "black", fill=NA),
+        aspect.ratio = 1, axis.text = element_text(colour = 1, size = 12),
+        legend.background = element_blank(),
+        legend.box.background = element_rect(colour = "black"))
+```
+```{r}
+library(ggplot2)
+ggplt6 <- ggplot(Arctic_Carn_Clean_log, aes(Arctic_Carn_Clean_log$lnCV, (Arctic_Carn_Clean_log$lnOTSA))) + geom_point(aes(color=Diet)) +
+ 
+  scale_x_continuous(breaks=seq(3.0,6.0,by=.5)) + scale_y_continuous(breaks=seq(3.5,5.5,by=.5)) +  stat_smooth(method = "lm",
+              formula =y ~ x,se = FALSE, color="black", size=.3) +
+  labs(x = "Log10 chamber volume (mm3)", y = "Log10 olfactory turbinal surface area (mm2)")  + geom_text(aes(label=Code), size=2, data=Arctic_Carn_Clean_log) + theme(
+  panel.border = element_blank(), 
+  panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(),
+  panel.background = element_blank(),
+  axis.line = element_line(colour = "black")) +
+  scale_shape_discrete(labels = c("Vetebrate", "Vertebrate/Non-vertebrate", "Non-vertebrate")) +
+  scale_colour_discrete(labels = c("Vetebrate", "Vertebrate/Non-vertebrate", "Non-vertebrate")) +
+  theme(legend.title = element_blank(),
+        legend.spacing.y = unit(0, "mm"),
+        panel.border = element_rect(colour = "black", fill=NA),
+        aspect.ratio = 1, axis.text = element_text(colour = 1, size = 12),
+        legend.background = element_blank(),
+        legend.box.background = element_rect(colour = "black"))
+ggplt6
+```
+```{r}
+ggplt7 <- ggplot(Arctic_Carn_Clean_log, aes(Arctic_Carn_Clean_log$lnRTSA, (Arctic_Carn_Clean_log$lnOTSA))) + geom_point(aes(color=Diet, shape=Diet)) +
+ 
+  scale_x_continuous(breaks=seq(2.5,5.0,by=.5)) + scale_y_continuous(breaks=seq(3.5,5.5,by=.5)) +
+    stat_smooth(method = "lm",
+              formula =y ~ x,se = FALSE, color="black", size=.3) +
+  labs(x = "Log10 chamber volume (mm3)", y = "Log10 olfactory turbinal surface area (mm2)")  + geom_text(aes(label=Code), size=2, data=Arctic_Carn_Clean_log) + theme(
+  panel.border = element_blank(), 
+  panel.grid.major = element_blank(),
+  panel.grid.minor = element_blank(),
+  panel.background = element_blank(),
+  axis.line = element_line(colour = "black")) +
+  scale_shape_discrete(labels = c("Vetebrate", "Vertebrate/Non-vertebrate", "Non-vertebrate")) +
+  scale_colour_discrete(labels = c("Vetebrate", "Vertebrate/Non-vertebrate", "Non-vertebrate")) +
+  theme(legend.title = element_blank(),
+        legend.spacing.y = unit(0, "mm"),
+        panel.border = element_rect(colour = "black", fill=NA),
+        aspect.ratio = 1, axis.text = element_text(colour = 1, size = 12),
+        legend.background = element_blank(),
+        legend.box.background = element_rect(colour = "black"))
+ggplt7
 ```
 ![](https://raw.githubusercontent.com/Warrenkevin/Semester_Project/main/PB2.gif)
+ 
