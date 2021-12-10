@@ -38,7 +38,7 @@ Arctic_Carn_Clean_log
 ### Replication
 ##### During this step I was able to select for the new log10 columns that I created to replicate the regression  models that were in Green et al. (2012). ggplot() was used to create ggplt1-ggplt5. The the first three figures (as seen below) are from Green et al. (2012). They are of total turbinate surface area (TTSA) vs Skull Length (SL), respiratory turbinate surface area (RTSA) vs body mass (kg) (BM), and respiratory surface area (RTSA) vs chamber volume (CV)
  
-![](https://raw.githubusercontent.com/Warrenkevin/Semester_Project/main/Screen%20Shot%202021-12-08%20at%209.50.48%20PM.png)
+![Figure 2 from Green et al. (2012)](https://raw.githubusercontent.com/Warrenkevin/Semester_Project/main/Screen%20Shot%202021-12-08%20at%209.50.48%20PM.png)
  
 ##### I loaded ggplot2 into R to create my graphics and used using geom_point() to tell R to select a shape based upon Family (e.g., Canidae or Arctoidea). Originally the graph axis were in increments of 1.0 so I used scale_x_continuous(breaks=seq()) and scale_y_continuous(breaks=seq()) to set the axis to the increments that were in Green et al. (2012) so as you see they differ between the five figures. Stat_smooth was used to get the linear regression. "Fullrange=True" was used because without it would only place a regression point from the start end of each the families that I used. This function allowed for a regression to go all the way through and not halfway. You will see two stat_smooth functions because one was for the linear regression without considering canids and arctoid and the other one is to have two separate regression for each Family. I was having issues getting the figures to be exactly the same because for the normal regression line they the authors made used a dashed line and color coded the arctoids and canids as different colors but I was not sure on how to do that because if changed the line type when selecting for Family it would have changed both.
  
@@ -124,7 +124,7 @@ ggplt3 + theme(legend.position = "none") +
         legend.box.background = element_rect(colour = "black"))
 ```
  
-![](https://raw.githubusercontent.com/Warrenkevin/Semester_Project/main/Screen%20Shot%202021-12-08%20at%209.50.39%20PM.png)
+![Figure 3 from Green et al. (2012)](https://raw.githubusercontent.com/Warrenkevin/Semester_Project/main/Screen%20Shot%202021-12-08%20at%209.50.39%20PM.png)
 ```{r}
 library(ggplot2)
 ggplt4 <- ggplot(Arctic_Carn_Clean_log, aes(Arctic_Carn_Clean_log$lnBM, Arctic_Carn_Clean_log$lnOTSA)) + geom_point(aes(shape=Family)) +
@@ -176,6 +176,9 @@ ggplt5 + theme(legend.position = "none") +
         legend.background = element_blank(),
         legend.box.background = element_rect(colour = "black"))
 ```
+
+![Figure 4 from Green et al. (2012)](https://raw.githubusercontent.com/Warrenkevin/Semester_Project/main/Screen%20Shot%202021-12-09%20at%207.12.58%20PM.png)
+
 ```{r}
 library(ggplot2)
 ggplt6 <- ggplot(Arctic_Carn_Clean_log, aes(Arctic_Carn_Clean_log$lnCV, (Arctic_Carn_Clean_log$lnOTSA))) + geom_point(aes(color=Diet)) +
@@ -195,7 +198,7 @@ ggplt6 <- ggplot(Arctic_Carn_Clean_log, aes(Arctic_Carn_Clean_log$lnCV, (Arctic_
         panel.border = element_rect(colour = "black", fill=NA),
         aspect.ratio = 1, axis.text = element_text(colour = 1, size = 12),
         legend.background = element_blank(),
-        legend.box.background = element_rect(colour = "black"))
+        legend.box.background = element_rect(colour = "black")) + theme(legend.position = c(0.25, 0.85))
 ggplt6
 ```
 ```{r}
@@ -217,7 +220,7 @@ ggplt7 <- ggplot(Arctic_Carn_Clean_log, aes(Arctic_Carn_Clean_log$lnRTSA, (Arcti
         panel.border = element_rect(colour = "black", fill=NA),
         aspect.ratio = 1, axis.text = element_text(colour = 1, size = 12),
         legend.background = element_blank(),
-        legend.box.background = element_rect(colour = "black"))
+        legend.box.background = element_rect(colour = "black")) + theme(legend.position = c(0.25, 0.85))
 ggplt7
 ```
 ![](https://raw.githubusercontent.com/Warrenkevin/Semester_Project/main/PB2.gif)
