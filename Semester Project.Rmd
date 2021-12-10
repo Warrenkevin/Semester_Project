@@ -1,7 +1,7 @@
 ---
 title: "Semester Project"
 author: "Warrenkevin Henderson"
-date: "12/08/2020"
+date: "12/09/2020"
 output: html_document
 ---
  
@@ -18,7 +18,7 @@ output: html_document
 library(dplyr)
 library(readxl)
 library(png)
-Arctic_Carn <- read_excel("~/Desktop/Data.xlsx")
+Arctic_Carn <- read_excel("Data_Correct.xlsx")
 head(Arctic_Carn)
 ```
 ### Select data
